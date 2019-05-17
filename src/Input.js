@@ -7,14 +7,13 @@ export class UnconnectedInput extends Component {
    * Create ref for input box and set initial state
    * @method constructor
    * @param {object} props
-   * @returns {undefined} 
+   * @returns {undefined}
    */
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.inputBox = React.createRef();
     this.state = {
       guess: ""
-    }
+    };
   }
   /**
    * Submits guess with current state `guess`
@@ -22,11 +21,12 @@ export class UnconnectedInput extends Component {
    * @param {object} event
    * @returns {undefined}
    */
-  onSubmit = (event) => {
+  onSubmit = event => {
     event.preventDefault();
-    this.props.guessWord(this.state.guess);
-    this.setState({guess: ""});
-  }
+    const { guess } = this.state;
+    this.props.guessWord(guess);
+    this.setState({ guess: "" });
+  };
 
   /**
    * Render the component
@@ -35,7 +35,7 @@ export class UnconnectedInput extends Component {
    */
   render() {
     const contents = this.props.success ? null : (
-      <form className="form-inline" onSubmit={(event) => event.preventDefault()}>
+      <form className="form-inline" onSubmit={event => event.preventDefault()}>
         <input
           data-test="input-box"
           ref={this.inputBox}
@@ -44,14 +44,14 @@ export class UnconnectedInput extends Component {
           type="text"
           placeholder="enter guess"
           value={this.state.guess}
-          onChange={event => this.setState({guess: event.target.value})}
+          onChange={event => this.setState({ guess: event.target.value })}
         />
         <button
           data-test="submit-button"
           className="btn btn-primary mb-2"
           type="submit"
           onClick={() => {
-            this.props.guessWord(this.state.guess)
+            this.props.guessWord(this.state.guess);
             this.setState({ guess: "" });
           }}
         >
@@ -69,8 +69,11 @@ const mapStateToProps = ({ success }) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    guessWord: () => dispatch(guessWord())
-  }
+    guessWord: (guess) => dispatch(guessWord(guess))
+  };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(UnconnectedInput);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(UnconnectedInput);
